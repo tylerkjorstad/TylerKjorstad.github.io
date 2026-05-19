@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tyler Kjorstad | Bookshelf</title>
+
+    <!--
+        ====================================================================
+        BOOKS / RECOMMENDATIONS PAGE
+        --------------------------------------------------------------------
+        Visual concept: "Reading Room" — a quiet, warm-paper aesthetic.
+        Each "book" is a typographically-designed card (no real cover
+        images required — this avoids copyright issues with publisher
+        artwork and turns the page into a typographic showcase).
+
+        Books are grouped by category. Add, remove, or rename categories
+        freely — duplicate one of the .book-card blocks to add a new
+        recommendation.
+
+        SECTIONS:
+          1. Nav
+          2. Hero (typographic, no image)
+          3. Reading philosophy
+          4. Book recommendations by category
+          5. Footer
+        ====================================================================
+    -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           CSS VARIABLES — reading-room palette
+           ============================================================ */
+        :root {
+            --paper:        #f7efdc;   /* warm paper */
+            --paper-mid:    #ebe0c4;   /* mid card stock */
+            --paper-soft:   #fbf6e8;   /* lightest, near-white */
+            --ink:          #2e2419;   /* primary text */
+            --ink-soft:     #5b4a37;   /* secondary text */
+            --oxblood:      #6e2a1f;   /* primary accent */
+            --oxblood-warm: #8e3a2d;   /* hover / highlight */
+            --brass:        #b48a39;   /* brass accent */
+            --gold-uw:      #ffc425;   /* tie-back to landing */
+            --hairline:     rgba(46, 36, 25, 0.18);
+            --hairline-strong: rgba(46, 36, 25, 0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Manrope', -apple-system, sans-serif;
+            color: var(--ink);
+            background: var(--paper);
+            line-height: 1.6;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle paper texture using radial gradients */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(180, 138, 57, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(110, 42, 31, 0.05) 0%, transparent 40%);
+        }
+        body > * { position: relative; z-index: 1; }
+
+        /* ============================================================
+           NAVIGATION
+           ============================================================ */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: var(--gold-uw);
+            padding: 22px 16px;
+            font-size: 1em;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .tabs a {
+            color: var(--ink);
+            text-decoration: none;
+            padding: 10px 22px;
+            margin: 0 6px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .tabs a:hover,
+        .tabs a.active {
+            background-color: var(--ink);
+            color: var(--gold-uw);
+        }
+
+        /* ============================================================
+           HERO — typographic, no image
+           ============================================================ */
+        .hero {
+            padding: 140px 8% 90px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .hero-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--oxblood);
+            margin-bottom: 26px;
+        }
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1;
+            font-size: clamp(3rem, 9vw, 7.5rem);
+            line-height: 0.92;
+            letter-spacing: -0.025em;
+            color: var(--ink);
+            margin-bottom: 28px;
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--oxblood);
+            font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+        }
+        .hero-lede {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+            font-weight: 300;
+            line-height: 1.45;
+            color: var(--ink-soft);
+            max-width: 660px;
+        }
+
+        /* Decorative dotted leader under hero — like in a table of contents */
+        .hero-rule {
+            margin-top: 60px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+        .hero-rule::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px dotted var(--hairline-strong);
+        }
+
+        /* ============================================================
+           SHARED SECTION
+           ============================================================ */
+        .category {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 70px 8% 30px;
+        }
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 50px;
+            padding-bottom: 18px;
+            border-bottom: 1.5px solid var(--ink);
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .category-title {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-variation-settings: "opsz" 144, "SOFT" 30;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            color: var(--ink);
+            letter-spacing: -0.01em;
+        }
+        .category-title em {
+            font-style: italic;
+            color: var(--oxblood);
+        }
+        .category-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+
+        /* ============================================================
+           BOOK GRID + CARDS
+           ------------------------------------------------------------
+           Each book "cover" is typeset — a colored rectangle with the
+           title and author set elegantly. Vary the cover color per book
+           by setting --cover-bg + --cover-fg inline on the card.
+           ============================================================ */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 44px 32px;
+        }
+        .book-card {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* The typeset "cover" — a 2:3 rectangle */
+        .book-cover {
+            aspect-ratio: 2 / 3;
+            background: var(--cover-bg, var(--oxblood));
+            color: var(--cover-fg, var(--paper));
+            position: relative;
+            padding: 28px 22px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.25),
+                inset 4px 0 0 rgba(0,0,0,0.18),
+                0 22px 38px -22px rgba(46, 36, 25, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        .book-card:hover .book-cover {
+            transform: translateY(-6px) rotate(-0.6deg);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.25),
+                inset 4px 0 0 rgba(0,0,0,0.18),
+                0 30px 55px -25px rgba(46, 36, 25, 0.55);
+        }
+        /* Decorative top ornament line on each cover */
+        .book-cover::before {
+            content: "";
+            position: absolute;
+            top: 14px;
+            left: 22px;
+            right: 22px;
+            height: 1px;
+            background: currentColor;
+            opacity: 0.4;
+        }
+        .book-cover::after {
+            content: "";
+            position: absolute;
+            bottom: 14px;
+            left: 22px;
+            right: 22px;
+            height: 1px;
+            background: currentColor;
+            opacity: 0.4;
+        }
+        .book-cover-title {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-variation-settings: "opsz" 60, "SOFT" 40;
+            font-size: 1.35rem;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+            margin-top: 20px;
+        }
+        .book-cover-author {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin-bottom: 14px;
+        }
+
+        /* Below the cover — the recommendation */
+        .book-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--brass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .book-rating {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            color: var(--brass);
+            font-size: 1rem;
+            letter-spacing: 0.04em;
+        }
+        .book-card h4 {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            color: var(--ink);
+        }
+        .book-card .book-author {
+            font-size: 0.92rem;
+            color: var(--ink-soft);
+            font-style: italic;
+            margin-top: -8px;
+            margin-bottom: 4px;
+        }
+        .book-card p {
+            font-size: 0.95rem;
+            color: var(--ink-soft);
+            line-height: 1.55;
+        }
+
+        /* ============================================================
+           DIVIDERS between categories
+           ============================================================ */
+        .category-divider {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 0 8%;
+            text-align: center;
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            color: var(--brass);
+            font-size: 1.5rem;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 70px 8% 40px;
+            text-align: center;
+            margin-top: 120px;
+        }
+        .footer-mono {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 2.4rem;
+            color: var(--gold-uw);
+            margin-bottom: 10px;
+        }
+        .footer-tag {
+            font-size: 0.95rem;
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 28px;
+            justify-content: center;
+            margin-bottom: 26px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--paper);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            transition: opacity 0.2s ease, color 0.2s ease;
+        }
+        .footer-links a:hover { opacity: 1; color: var(--gold-uw); }
+        .footer-copy {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            opacity: 0.5;
+            letter-spacing: 0.12em;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 800px) {
+            .hero { padding: 100px 6% 60px; }
+            .category { padding: 60px 6% 20px; }
+            .book-grid { gap: 36px 24px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =================  NAVIGATION  ================= -->
+    <nav class="tabs">
+        <a href="index.html">Home</a>
+        <a href="passions.html">Passions</a>
+        <a href="professional.html">Professional</a>
+        <a href="books.html" class="active">Books</a>
+    </nav>
+
+    <!-- =================  HERO  ================= -->
+    <section class="hero">
+        <div class="hero-eyebrow">From the Shelf · A Reading Log</div>
+        <h1>Books that <em>changed</em><br>how I think.</h1>
+        <p class="hero-lede">
+            A growing, opinionated list — sorted by what they're about
+            rather than how famous they are. Five categories, a few books
+            in each. Each one earned its spot for a different reason.
+        </p>
+        <div class="hero-rule">Updated quarterly · Currently 16 titles</div>
+    </section>
+
+    <!-- ============================================================
+         CATEGORY 1 — Economics & Decision-Making
+         ============================================================ -->
+    <section class="category">
+        <div class="category-header">
+            <h2 class="category-title">Economics & <em>Decision-Making</em></h2>
+            <span class="category-meta">No. 01 · Four Titles</span>
+        </div>
+
+        <div class="book-grid">
+
+            <!-- BOOK CARD TEMPLATE
+                 To add a book: copy this whole .book-card block.
+                 To change the cover color: edit --cover-bg (the rectangle
+                 color) and --cover-fg (the text color on the rectangle)
+                 in the style="" attribute. -->
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #1f3a3d; --cover-fg: #e8d5a8;">
+                    <div class="book-cover-title">Thinking, Fast and Slow</div>
+                    <div class="book-cover-author">Daniel Kahneman</div>
+                </div>
+                <div class="book-meta">
+                    <span>Behavioral Econ</span>
+                    <span class="book-rating">★★★★★</span>
+                </div>
+                <h4>Thinking, Fast and Slow</h4>
+                <div class="book-author">Daniel Kahneman</div>
+                <p>The book I most often hand to students. It's not a
+                   quick read, but the System 1 / System 2 frame will
+                   keep paying you back for the rest of your career.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #6e2a1f; --cover-fg: #f7efdc;">
+                    <div class="book-cover-title">The Signal and the Noise</div>
+                    <div class="book-cover-author">Nate Silver</div>
+                </div>
+                <div class="book-meta">
+                    <span>Forecasting</span>
+                    <span class="book-rating">★★★★½</span>
+                </div>
+                <h4>The Signal and the Noise</h4>
+                <div class="book-author">Nate Silver</div>
+                <p>What you actually need to believe about predictions
+                   in order not to embarrass yourself making them. A
+                   surprisingly humane book about probability.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #e8d5a8; --cover-fg: #2e2419;">
+                    <div class="book-cover-title">Range</div>
+                    <div class="book-cover-author">David Epstein</div>
+                </div>
+                <div class="book-meta">
+                    <span>Career & Skill</span>
+                    <span class="book-rating">★★★★½</span>
+                </div>
+                <h4>Range</h4>
+                <div class="book-author">David Epstein</div>
+                <p>The case for breadth over specialization. Particularly
+                   useful if you, like me, occasionally worry you've
+                   tried too many things.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #2e2419; --cover-fg: #b48a39;">
+                    <div class="book-cover-title">How to Decide</div>
+                    <div class="book-cover-author">Annie Duke</div>
+                </div>
+                <div class="book-meta">
+                    <span>Decision Quality</span>
+                    <span class="book-rating">★★★★</span>
+                </div>
+                <h4>How to Decide</h4>
+                <div class="book-author">Annie Duke</div>
+                <p>Separating decision quality from outcome quality —
+                   one of the most underrated mental moves in business
+                   or life. Practical, exercise-driven, short.</p>
+            </article>
+
+        </div>
+    </section>
+
+    <div class="category-divider">·  ·  ·</div>
+
+    <!-- ============================================================
+         CATEGORY 2 — Endurance & Movement
+         ============================================================ -->
+    <section class="category">
+        <div class="category-header">
+            <h2 class="category-title">Endurance & <em>Movement</em></h2>
+            <span class="category-meta">No. 02 · Four Titles</span>
+        </div>
+
+        <div class="book-grid">
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #3d5a3a; --cover-fg: #f7efdc;">
+                    <div class="book-cover-title">Born to Run</div>
+                    <div class="book-cover-author">Christopher McDougall</div>
+                </div>
+                <div class="book-meta">
+                    <span>Trail Running</span>
+                    <span class="book-rating">★★★★★</span>
+                </div>
+                <h4>Born to Run</h4>
+                <div class="book-author">Christopher McDougall</div>
+                <p>The book that recruits trail runners. Whether or not
+                   you believe every claim, the story of the Tarahumara
+                   will get you outside.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #b48a39; --cover-fg: #2e2419;">
+                    <div class="book-cover-title">Endure</div>
+                    <div class="book-cover-author">Alex Hutchinson</div>
+                </div>
+                <div class="book-meta">
+                    <span>Sport Science</span>
+                    <span class="book-rating">★★★★½</span>
+                </div>
+                <h4>Endure</h4>
+                <div class="book-author">Alex Hutchinson</div>
+                <p>The most honest book about what actually limits human
+                   performance — and how much of that limit is in your
+                   head. Required reading for ultra-distance hopefuls.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #6e2a1f; --cover-fg: #ebe0c4;">
+                    <div class="book-cover-title">Good to Go</div>
+                    <div class="book-cover-author">Christie Aschwanden</div>
+                </div>
+                <div class="book-meta">
+                    <span>Recovery</span>
+                    <span class="book-rating">★★★★</span>
+                </div>
+                <h4>Good to Go</h4>
+                <div class="book-author">Christie Aschwanden</div>
+                <p>A reporter's tour of the recovery industry. What works,
+                   what doesn't, and what the placebo effect is actually
+                   doing for you.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #f7efdc; --cover-fg: #2e2419;">
+                    <div class="book-cover-title">Running with the Buffaloes</div>
+                    <div class="book-cover-author">Chris Lear</div>
+                </div>
+                <div class="book-meta">
+                    <span>Memoir / Team</span>
+                    <span class="book-rating">★★★★★</span>
+                </div>
+                <h4>Running with the Buffaloes</h4>
+                <div class="book-author">Chris Lear</div>
+                <p>One season inside Mark Wetmore's CU cross-country
+                   program. The best book ever written about being part
+                   of a hard team.</p>
+            </article>
+
+        </div>
+    </section>
+
+    <div class="category-divider">·  ·  ·</div>
+
+    <!-- ============================================================
+         CATEGORY 3 — Teaching & Craft
+         ============================================================ -->
+    <section class="category">
+        <div class="category-header">
+            <h2 class="category-title">Teaching & <em>Craft</em></h2>
+            <span class="category-meta">No. 03 · Three Titles</span>
+        </div>
+
+        <div class="book-grid">
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #1f3a3d; --cover-fg: #b48a39;">
+                    <div class="book-cover-title">Make It Stick</div>
+                    <div class="book-cover-author">Brown, Roediger, McDaniel</div>
+                </div>
+                <div class="book-meta">
+                    <span>Learning Science</span>
+                    <span class="book-rating">★★★★★</span>
+                </div>
+                <h4>Make It Stick</h4>
+                <div class="book-author">Brown, Roediger & McDaniel</div>
+                <p>The book I wish every new instructor read in their
+                   first month. Spaced practice and retrieval are not
+                   tricks — they're how learning works.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #8e3a2d; --cover-fg: #ebe0c4;">
+                    <div class="book-cover-title">Small Teaching</div>
+                    <div class="book-cover-author">James M. Lang</div>
+                </div>
+                <div class="book-meta">
+                    <span>Pedagogy</span>
+                    <span class="book-rating">★★★★½</span>
+                </div>
+                <h4>Small Teaching</h4>
+                <div class="book-author">James M. Lang</div>
+                <p>Tiny, evidence-backed changes to your courses that
+                   add up. The opposite of a curriculum overhaul — and
+                   far more likely to actually happen.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #2e2419; --cover-fg: #f7efdc;">
+                    <div class="book-cover-title">On Writing Well</div>
+                    <div class="book-cover-author">William Zinsser</div>
+                </div>
+                <div class="book-meta">
+                    <span>Communication</span>
+                    <span class="book-rating">★★★★★</span>
+                </div>
+                <h4>On Writing Well</h4>
+                <div class="book-author">William Zinsser</div>
+                <p>Still the best book on writing clearly. I tell every
+                   student that the most underrated business skill is
+                   the ability to write a short, honest paragraph.</p>
+            </article>
+
+        </div>
+    </section>
+
+    <div class="category-divider">·  ·  ·</div>
+
+    <!-- ============================================================
+         CATEGORY 4 — Place & Nature
+         ============================================================ -->
+    <section class="category">
+        <div class="category-header">
+            <h2 class="category-title">Place & <em>Nature</em></h2>
+            <span class="category-meta">No. 04 · Three Titles</span>
+        </div>
+
+        <div class="book-grid">
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #3d5a3a; --cover-fg: #f7efdc;">
+                    <div class="book-cover-title">A Sand County Almanac</div>
+                    <div class="book-cover-author">Aldo Leopold</div>
+                </div>
+                <div class="book-meta">
+                    <span>Conservation</span>
+                    <span class="book-rating">★★★★★</span>
+                </div>
+                <h4>A Sand County Almanac</h4>
+                <div class="book-author">Aldo Leopold</div>
+                <p>Foundational. The land ethic still hits as hard as it
+                   did in 1949. Read "Thinking Like a Mountain" once a
+                   year, minimum.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #f7efdc; --cover-fg: #6e2a1f;">
+                    <div class="book-cover-title">Braiding Sweetgrass</div>
+                    <div class="book-cover-author">Robin Wall Kimmerer</div>
+                </div>
+                <div class="book-meta">
+                    <span>Natural History</span>
+                    <span class="book-rating">★★★★★</span>
+                </div>
+                <h4>Braiding Sweetgrass</h4>
+                <div class="book-author">Robin Wall Kimmerer</div>
+                <p>Indigenous wisdom and Western science braided together
+                   into something better than either on its own. A book
+                   you'll keep returning to.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #1f3a3d; --cover-fg: #e8d5a8;">
+                    <div class="book-cover-title">Desert Solitaire</div>
+                    <div class="book-cover-author">Edward Abbey</div>
+                </div>
+                <div class="book-meta">
+                    <span>Place Writing</span>
+                    <span class="book-rating">★★★★½</span>
+                </div>
+                <h4>Desert Solitaire</h4>
+                <div class="book-author">Edward Abbey</div>
+                <p>Cantankerous, contradictory, indispensable. Abbey's
+                   season at Arches before the pavement is still the
+                   best book about the American Southwest.</p>
+            </article>
+
+        </div>
+    </section>
+
+    <div class="category-divider">·  ·  ·</div>
+
+    <!-- ============================================================
+         CATEGORY 5 — Currently Reading
+         A small "now reading" shelf to keep the page alive.
+         ============================================================ -->
+    <section class="category">
+        <div class="category-header">
+            <h2 class="category-title">Currently <em>Reading</em></h2>
+            <span class="category-meta">No. 05 · As of this quarter</span>
+        </div>
+
+        <div class="book-grid">
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #b48a39; --cover-fg: #2e2419;">
+                    <div class="book-cover-title">The Comfort Crisis</div>
+                    <div class="book-cover-author">Michael Easter</div>
+                </div>
+                <div class="book-meta">
+                    <span>In Progress</span>
+                    <span class="book-rating">★★★★ (so far)</span>
+                </div>
+                <h4>The Comfort Crisis</h4>
+                <div class="book-author">Michael Easter</div>
+                <p>An argument for putting some difficulty back into
+                   modern life. Halfway through. Cautiously optimistic.</p>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover" style="--cover-bg: #6e2a1f; --cover-fg: #f7efdc;">
+                    <div class="book-cover-title">The Anxious Generation</div>
+                    <div class="book-cover-author">Jonathan Haidt</div>
+                </div>
+                <div class="book-meta">
+                    <span>In Progress</span>
+                    <span class="book-rating">— pending —</span>
+                </div>
+                <h4>The Anxious Generation</h4>
+                <div class="book-author">Jonathan Haidt</div>
+                <p>Reading for the teaching side of my brain.
+                   I'll have a verdict in a few weeks.</p>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- =================  FOOTER  ================= -->
+    <footer>
+        <div class="footer-mono">TK</div>
+        <div class="footer-tag">Stay curious. Keep moving. Do good work.</div>
+        <div class="footer-links">
+            <a href="https://www.linkedin.com/in/tyler-kjorstad-93106128/">LinkedIn</a>
+            <a href="https://github.com/tylerkjorstad">GitHub</a>
+            <a href="mailto:tkjorsta@uwyo.edu">Email</a>
+        </div>
+        <div class="footer-copy">© 2026 Tyler Kjorstad</div>
+    </footer>
+
+</body>
+</html>

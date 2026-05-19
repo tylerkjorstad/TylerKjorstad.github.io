@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tyler Kjorstad | Passions</title>
+
+    <!--
+        ====================================================================
+        PASSIONS PAGE
+        --------------------------------------------------------------------
+        Visual concept: "Field Journal" — a personal outdoor logbook.
+        Inspired by your birch-trail photo near Duluth. Color palette
+        matches the landing page: UW brown, UW gold, and birch cream.
+        The birch hero photo carries its own natural greens — the CSS
+        doesn't add any.
+
+        SECTIONS:
+          1. Nav (matches landing page)
+          2. Hero (birch trail image w/ overlay text)
+          3. Intro
+          4. Four activity cards: MTB, Trail Run, XC Ski, Shed Hunting
+          5. Race Reviews grid
+          6. Footer
+
+        IMAGES TO UPLOAD to your UW student folder for this page:
+          - birch-trail.jpg       (the photo you sent)
+          - mtb-trail.jpg         (optional — for MTB card)
+          - trail-running.jpg     (optional — for running card)
+          - xc-skiing.jpg         (optional — for ski card)
+          - shed-hunting.jpg      (optional — for shed card)
+        The page works fine without those optional photos — placeholders
+        gracefully fall back to gradient backgrounds.
+        ====================================================================
+    -->
+
+    <!-- Google Fonts: Fraunces (display, variable serif), Manrope (body), JetBrains Mono (data) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           CSS VARIABLES — brown + gold + cream, matching the landing.
+           No greens — the birch hero photo brings its own natural color.
+           ============================================================ */
+        :root {
+            --birch-cream:   #f5efe4;   /* paper / birch bark interior */
+            --birch-white:   #fbf8f1;   /* lightest, almost white */
+            --bark-brown:    #492f24;   /* UW brown — primary text */
+            --bark-deep:     #2c1f15;   /* deepest brown — headlines */
+            --bark-mid:      #6b5742;   /* secondary text */
+            --bark-warm:     #5d3a1e;   /* rich warm brown — italic accents */
+            --gold-uw:       #ffc425;   /* UW gold — direct tie to landing */
+            --gold-warm:     #c89b3c;   /* aged gold — eyebrows, labels */
+            --gold-deep:     #8a6817;   /* deep gold — small text, hover */
+            --hairline:      rgba(73, 47, 36, 0.18);
+        }
+
+        /* Reset + base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Manrope', -apple-system, sans-serif;
+            color: var(--bark-brown);
+            background: var(--birch-white);
+            line-height: 1.6;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============================================================
+           NAVIGATION (matches your landing page style — gold bar)
+           ============================================================ */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: var(--gold-uw);
+            padding: 22px 16px;
+            font-size: 1em;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            font-family: 'Manrope', sans-serif;
+        }
+        .tabs a {
+            color: var(--bark-brown);
+            text-decoration: none;
+            padding: 10px 22px;
+            margin: 0 6px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .tabs a:hover,
+        .tabs a.active {
+            background-color: var(--bark-brown);
+            color: var(--gold-uw);
+        }
+
+        /* ============================================================
+           HERO — birch trail with overlay
+           Uses your birch image; falls back to a green gradient.
+           ============================================================ */
+        .hero {
+            position: relative;
+            height: 78vh;
+            min-height: 520px;
+            background:
+                linear-gradient(180deg,
+                    rgba(44, 31, 21, 0.15) 0%,
+                    rgba(44, 31, 21, 0.55) 100%),
+                linear-gradient(135deg, #6b5742 0%, #2c1f15 100%),
+                url('birch-trail.jpg');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: normal, multiply, normal;
+            display: flex;
+            align-items: flex-end;
+            color: var(--birch-cream);
+            overflow: hidden;
+        }
+        /* Decorative coordinate strip — references your home in Duluth, MN */
+        .hero::before {
+            content: "46.7867° N · 92.1005° W  ·  Duluth, MN";
+            position: absolute;
+            top: 28px;
+            left: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--birch-cream);
+            opacity: 0.85;
+        }
+        .hero-inner {
+            padding: 0 8% 7vh;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .hero-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1;
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold-uw);
+            font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            max-width: 560px;
+            line-height: 1.5;
+            opacity: 0.92;
+        }
+
+        /* ============================================================
+           SHARED SECTION SCAFFOLDING
+           ============================================================ */
+        section {
+            padding: 100px 8%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold-deep);
+            margin-bottom: 18px;
+        }
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-variation-settings: "opsz" 144, "SOFT" 40;
+            font-size: clamp(2rem, 4.5vw, 3.4rem);
+            line-height: 1.05;
+            letter-spacing: -0.015em;
+            margin-bottom: 40px;
+            max-width: 800px;
+        }
+        .section-title em {
+            font-style: italic;
+            color: var(--bark-warm);
+        }
+
+        /* Intro paragraph block under hero */
+        .intro {
+            padding-top: 90px;
+            padding-bottom: 70px;
+        }
+        .intro-lede {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+            font-weight: 300;
+            line-height: 1.4;
+            color: var(--bark-mid);
+            max-width: 760px;
+        }
+        .intro-lede::first-letter {
+            font-size: 4.5rem;
+            font-weight: 500;
+            float: left;
+            line-height: 0.9;
+            margin: 6px 14px 0 0;
+            color: var(--bark-warm);
+            font-style: italic;
+        }
+
+        /* ============================================================
+           ACTIVITY CARDS — four passions
+           Asymmetric grid; alternates left/right image positions.
+           ============================================================ */
+        .activities {
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+        .activity {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 110px;
+            position: relative;
+        }
+        .activity:nth-child(even) .activity-media {
+            order: 2;
+        }
+        .activity-media {
+            aspect-ratio: 4 / 5;
+            background: linear-gradient(135deg, var(--bark-mid), var(--bark-deep));
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -25px rgba(73, 47, 36, 0.4);
+        }
+        .activity-media .placeholder-glyph {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-size: 8rem;
+            color: rgba(245, 239, 228, 0.18);
+        }
+        .activity-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .activity-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: var(--gold-warm);
+            margin-bottom: 12px;
+        }
+        .activity h3 {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-variation-settings: "opsz" 144, "WONK" 1;
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            line-height: 1;
+            margin-bottom: 22px;
+            color: var(--bark-brown);
+        }
+        .activity h3 em {
+            font-style: italic;
+            color: var(--bark-warm);
+        }
+        .activity p {
+            font-size: 1.05rem;
+            color: var(--bark-mid);
+            margin-bottom: 28px;
+            max-width: 460px;
+        }
+        /* Stat strip inside each activity card */
+        .activity-stats {
+            display: flex;
+            gap: 30px;
+            padding-top: 22px;
+            border-top: 1px solid var(--hairline);
+            max-width: 460px;
+            flex-wrap: wrap;
+        }
+        .activity-stat {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .activity-stat .stat-value {
+            display: block;
+            font-size: 1.3rem;
+            color: var(--bark-brown);
+            font-weight: 500;
+        }
+        .activity-stat .stat-label {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--bark-mid);
+            margin-top: 4px;
+        }
+
+        /* ============================================================
+           RACE REVIEWS — separate from outdoor passions section
+           Grid of race-review cards.
+           ============================================================ */
+        .race-reviews {
+            background: var(--birch-cream);
+            margin: 0;
+            max-width: none;
+            padding: 110px 0;
+            border-top: 1px solid var(--hairline);
+            border-bottom: 1px solid var(--hairline);
+        }
+        .race-reviews-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 8%;
+        }
+        .race-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 32px;
+            margin-top: 50px;
+        }
+        .race-card {
+            background: var(--birch-white);
+            padding: 32px 30px 28px;
+            border: 1px solid var(--hairline);
+            border-radius: 2px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .race-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -20px rgba(58, 45, 32, 0.25);
+        }
+        .race-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed var(--hairline);
+        }
+        .race-discipline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold-warm);
+            padding-top: 4px;
+        }
+        .race-rating {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            color: var(--gold-warm);
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+        }
+        .race-card h4 {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 1.45rem;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+        .race-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--bark-mid);
+            margin-bottom: 14px;
+            letter-spacing: 0.06em;
+        }
+        .race-card p {
+            font-size: 0.95rem;
+            color: var(--bark-mid);
+            line-height: 1.55;
+        }
+        .race-tag {
+            display: inline-block;
+            margin-top: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--bark-brown);
+            border-bottom: 1.5px solid var(--gold-uw);
+            padding-bottom: 1px;
+        }
+
+        /* ============================================================
+           FOOTER — matches landing page style
+           ============================================================ */
+        footer {
+            background: var(--bark-brown);
+            color: var(--birch-cream);
+            padding: 70px 8% 40px;
+            text-align: center;
+        }
+        .footer-mono {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 2.4rem;
+            color: var(--gold-uw);
+            margin-bottom: 10px;
+        }
+        .footer-tag {
+            font-size: 0.95rem;
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 28px;
+            justify-content: center;
+            margin-bottom: 26px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--birch-cream);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            transition: opacity 0.2s ease, color 0.2s ease;
+        }
+        .footer-links a:hover { opacity: 1; color: var(--gold-uw); }
+        .footer-copy {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            opacity: 0.5;
+            letter-spacing: 0.12em;
+        }
+
+        /* ============================================================
+           RESPONSIVE — stack the activity grid on tablets/phones
+           ============================================================ */
+        @media (max-width: 800px) {
+            section { padding: 70px 6%; }
+            .hero-inner { padding: 0 6% 6vh; }
+            .hero::before { left: 6%; font-size: 0.7rem; }
+            .activity {
+                grid-template-columns: 1fr;
+                gap: 28px;
+                margin-bottom: 80px;
+            }
+            .activity:nth-child(even) .activity-media { order: 0; }
+            .activity-media { aspect-ratio: 5 / 4; }
+            .race-reviews { padding: 80px 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =================  NAVIGATION  ================= -->
+    <!-- Same structure as your landing page so the site feels unified -->
+    <nav class="tabs">
+        <a href="index.html">Home</a>
+        <a href="passions.html" class="active">Passions</a>
+        <a href="professional.html">Professional</a>
+        <a href="books.html">Books</a>
+    </nav>
+
+    <!-- =================  HERO  ================= -->
+    <header class="hero">
+        <div class="hero-inner">
+            <div class="hero-eyebrow">Passions · Vol. I</div>
+            <h1>Out where<br>the trail <em>breathes.</em></h1>
+            <p>Birch corridors, ribbon singletrack, frozen tracks at dawn,
+               and shed antlers under last year's leaves — the places I keep
+               coming back to.</p>
+        </div>
+    </header>
+
+    <!-- =================  INTRO  ================= -->
+    <section class="intro">
+        <p class="intro-lede">
+            What I do outside isn't training for anything in particular —
+            it's how I think. Each of these disciplines teaches a different
+            kind of patience. Below are the four I keep closest, plus a
+            growing logbook of the races I'd recommend you sign up for.
+        </p>
+    </section>
+
+    <!-- =================  ACTIVITIES  ================= -->
+    <section class="activities">
+
+        <!-- ACTIVITY 1 — Mountain Biking -->
+        <article class="activity">
+            <div class="activity-media">
+                <!-- Replace src with your photo path; placeholder glyph shows if image missing -->
+                <span class="placeholder-glyph">↟</span>
+                <!-- <img src="mtb-trail.jpg" alt="Mountain biking" /> -->
+            </div>
+            <div class="activity-body">
+                <div class="activity-number">No. 01 / Two Wheels</div>
+                <h3>Mountain <em>Biking</em></h3>
+                <p>Duluth's Cyclists of Gitchee Gumee Shores (COGGS) network
+                   is what got me hooked — rooty, rocky, north-shore flow.
+                   I'll always come back to Piedmont and the Mission Creek
+                   loop, but lately I've been chasing flowy bench-cut up at
+                   Pilot Hill in Laramie too.</p>
+                <div class="activity-stats">
+                    <div class="activity-stat">
+                        <span class="stat-value">160 mi</span>
+                        <span class="stat-label">Avg Monthly</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">29er HT</span>
+                        <span class="stat-label">Daily Driver</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">Piedmont</span>
+                        <span class="stat-label">Home Trail</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ACTIVITY 2 — Trail Running -->
+        <article class="activity">
+            <div class="activity-media">
+                <span class="placeholder-glyph">/\/\</span>
+                <!-- <img src="trail-running.jpg" alt="Trail running" /> -->
+            </div>
+            <div class="activity-body">
+                <div class="activity-number">No. 02 / On Foot</div>
+                <h3>Trail <em>Running</em></h3>
+                <p>The most honest sport I know. No drivetrain to blame,
+                   no skis to wax — just whatever you brought today.
+                   Hartley Park, Lester Park, and the Superior Hiking Trail
+                   when there's time. The longer the run, the better the
+                   thinking.</p>
+                <div class="activity-stats">
+                    <div class="activity-stat">
+                        <span class="stat-value">55 mpw</span>
+                        <span class="stat-label">Current Volume</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">7:40 /mi</span>
+                        <span class="stat-label">Easy Pace</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">50K</span>
+                        <span class="stat-label">Next Target</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ACTIVITY 3 — Cross Country Skiing -->
+        <article class="activity">
+            <div class="activity-media">
+                <span class="placeholder-glyph">△</span>
+                <!-- <img src="xc-skiing.jpg" alt="XC skiing" /> -->
+            </div>
+            <div class="activity-body">
+                <div class="activity-number">No. 03 / Winter Engine</div>
+                <h3>Cross Country <em>Skiing</em></h3>
+                <p>Korkki, Lester, Snowflake — Duluth quietly has one of
+                   the best Nordic networks in the country. Skate when it's
+                   fast, classic when it's cold. The American Birkebeiner is
+                   the season's center of gravity; everything else trains
+                   toward or recovers from it.</p>
+                <div class="activity-stats">
+                    <div class="activity-stat">
+                        <span class="stat-value">Skate / Classic</span>
+                        <span class="stat-label">Both, Always</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">Birkie</span>
+                        <span class="stat-label">Season Anchor</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">−10 °F</span>
+                        <span class="stat-label">Coldest Tolerable</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ACTIVITY 4 — Shed Hunting -->
+        <article class="activity">
+            <div class="activity-media">
+                <span class="placeholder-glyph">Y</span>
+                <!-- <img src="shed-hunting.jpg" alt="Shed hunting" /> -->
+            </div>
+            <div class="activity-body">
+                <div class="activity-number">No. 04 / Slow Walking</div>
+                <h3>Shed <em>Hunting</em></h3>
+                <p>The opposite of a workout — you're walking slowly,
+                   scanning at the right contrast, reading where the deer
+                   actually bedded vs. where you assumed. Half exercise,
+                   half pattern recognition. Bonus: nothing teaches a
+                   landscape like covering it at a foot per second.</p>
+                <div class="activity-stats">
+                    <div class="activity-stat">
+                        <span class="stat-value">Mar – Apr</span>
+                        <span class="stat-label">Prime Window</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">Whitetail</span>
+                        <span class="stat-label">Mostly</span>
+                    </div>
+                    <div class="activity-stat">
+                        <span class="stat-value">Slow / Eyes</span>
+                        <span class="stat-label">Only Gear Needed</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- =================  RACE REVIEWS  ================= -->
+    <!-- A separate area outside the outdoor passions section, as you asked.
+         Each card is a "review" — name, discipline, location, rating, blurb.
+         Add or remove .race-card entries as your library grows. -->
+    <section class="race-reviews">
+        <div class="race-reviews-inner">
+            <div class="section-eyebrow">Logbook · Recommendations</div>
+            <h2 class="section-title">Races worth <em>signing up for.</em></h2>
+            <p style="max-width: 640px; color: var(--bark-mid); font-size: 1.05rem;">
+                A growing log of the races I've actually toed the line at —
+                what makes each one worth the trip, who they're best for,
+                and what to expect.
+            </p>
+
+            <div class="race-grid">
+
+                <!-- RACE 1 -->
+                <article class="race-card">
+                    <div class="race-card-head">
+                        <span class="race-discipline">Nordic Ski / 50 km</span>
+                        <span class="race-rating">★★★★★</span>
+                    </div>
+                    <h4>American Birkebeiner</h4>
+                    <div class="race-meta">Hayward → Cable, WI · February</div>
+                    <p>The North American Nordic event. Roaring start at
+                       OO, the Birkie climbs, and a finish straight down
+                       Main Street in Hayward that you'll remember for years.</p>
+                    <span class="race-tag">Bucket List</span>
+                </article>
+
+                <!-- RACE 2 -->
+                <article class="race-card">
+                    <div class="race-card-head">
+                        <span class="race-discipline">Trail Run / Marathon</span>
+                        <span class="race-rating">★★★★½</span>
+                    </div>
+                    <h4>Eugene Curnow Trail Marathon</h4>
+                    <div class="race-meta">Carlton → Duluth, MN · July</div>
+                    <p>26.2 miles on the Superior Hiking Trail. Brutal,
+                       beautiful, and a Voyageur 50 qualifier. Best for
+                       runners who like rocks, roots, and earned views.</p>
+                    <span class="race-tag">Home Field</span>
+                </article>
+
+                <!-- RACE 3 -->
+                <article class="race-card">
+                    <div class="race-card-head">
+                        <span class="race-discipline">MTB / 100 mi</span>
+                        <span class="race-rating">★★★★★</span>
+                    </div>
+                    <h4>Lutsen 99er</h4>
+                    <div class="race-meta">Lutsen, MN · June</div>
+                    <p>Gravel, doubletrack, and ski-hill climbs along Lake
+                       Superior's north shore. Aid stations are top-tier
+                       and the post-race grill is reason enough alone.</p>
+                    <span class="race-tag">Endurance</span>
+                </article>
+
+                <!-- RACE 4 -->
+                <article class="race-card">
+                    <div class="race-card-head">
+                        <span class="race-discipline">Trail Run / 50K</span>
+                        <span class="race-rating">★★★★</span>
+                    </div>
+                    <h4>Superior Spring Trail Races</h4>
+                    <div class="race-meta">Lutsen, MN · May</div>
+                    <p>A great first ultra if you're moving up from the
+                       marathon. Snow is gone (mostly), bugs aren't out
+                       yet, and the SHT looks its absolute best.</p>
+                    <span class="race-tag">First Ultra Friendly</span>
+                </article>
+
+                <!--
+                    To add another race review, copy this block:
+
+                    <article class="race-card">
+                        <div class="race-card-head">
+                            <span class="race-discipline">DISCIPLINE / DISTANCE</span>
+                            <span class="race-rating">★★★★</span>
+                        </div>
+                        <h4>RACE NAME</h4>
+                        <div class="race-meta">LOCATION · MONTH</div>
+                        <p>YOUR REVIEW.</p>
+                        <span class="race-tag">TAG</span>
+                    </article>
+                -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =================  FOOTER  ================= -->
+    <footer>
+        <div class="footer-mono">TK</div>
+        <div class="footer-tag">Stay curious. Keep moving. Do good work.</div>
+        <div class="footer-links">
+            <a href="https://www.linkedin.com/in/tyler-kjorstad-93106128/">LinkedIn</a>
+            <a href="https://github.com/tylerkjorstad">GitHub</a>
+            <a href="mailto:tkjorsta@uwyo.edu">Email</a>
+        </div>
+        <div class="footer-copy">© 2026 Tyler Kjorstad</div>
+    </footer>
+
+</body>
+</html>

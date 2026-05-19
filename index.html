@@ -1,0 +1,689 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+      Basic page setup
+      - charset tells the browser how to read the characters
+      - viewport makes the page scale properly on phones/tablets
+      - title appears in the browser tab
+    -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tyler Kjorstad | Personal Website</title>
+
+    <!--
+      Optional Google Fonts
+      These create the "science journal + editorial athlete" feeling.
+      If your school hosting blocks external fonts, the backup fonts will still work.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+            /*
+          COLOR VARIABLES
+          These are the core colors for the whole site.
+          Changing these values updates the look across the page.
+        */
+            :root {
+                --paper: #f4f1ea; /* warm cream background */
+                --paper-light: #fbfaf6; /* slightly lighter card background */
+                --ink: #1c1c1c; /* main text color */
+                --forest: #123524; /* deep forest green */
+                --forest-light: #1f5138; /* hover color */
+                --accent: #c2a878; /* muted tan/gold accent */
+                --muted: #6b6f68; /* secondary text */
+                --border: #d6d3cd; /* thin journal-style border */
+            }
+
+            /*
+          GLOBAL RESET
+          This removes default browser spacing and makes sizing easier to control.
+        */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                background: var(--paper);
+                color: var(--ink);
+                font-family: 'Inter', Arial, sans-serif;
+                line-height: 1.6;
+            }
+
+            img {
+                max-width: 100%;
+                display: block;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            /*
+          PAGE WRAPPER
+          Keeps the entire site from getting too wide on large screens.
+        */
+            .page {
+                width: min(100%, 1400px);
+                margin: 0 auto;
+                border-left: 1px solid var(--border);
+                border-right: 1px solid var(--border);
+                background: var(--paper);
+            }
+
+            /*
+          TOP NAVIGATION BAR
+          Contains the name/logo on the left and menu links on the right.
+        */
+            .site-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 28px 64px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .site-name {
+                font-size: 0.95rem;
+                font-weight: 700;
+                letter-spacing: 0.28em;
+                text-transform: uppercase;
+                color: var(--forest);
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 44px;
+                align-items: center;
+                font-size: 0.95rem;
+            }
+
+                .nav-links a {
+                    position: relative;
+                    padding-bottom: 6px;
+                }
+
+                    /* underline effect on hover and active page */
+                    .nav-links a:hover,
+                    .nav-links a.active {
+                        color: var(--forest);
+                    }
+
+                        .nav-links a.active::after,
+                        .nav-links a:hover::after {
+                            content: "";
+                            position: absolute;
+                            left: 0;
+                            bottom: 0;
+                            width: 100%;
+                            height: 1px;
+                            background: var(--forest);
+                        }
+
+            /*
+          HERO SECTION
+          Two-column layout: written introduction on left, large image on right.
+        */
+            .hero {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 72px;
+                align-items: center;
+                padding: 64px 88px 56px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .eyebrow {
+                display: inline-block;
+                font-size: 0.78rem;
+                font-weight: 600;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--forest);
+                margin-bottom: 36px;
+            }
+
+                .eyebrow::after {
+                    content: "";
+                    display: block;
+                    width: 32px;
+                    height: 1px;
+                    background: var(--forest);
+                    margin-top: 12px;
+                }
+
+            .hero h1 {
+                font-family: 'Libre Baskerville', Georgia, serif;
+                font-size: clamp(2.8rem, 5vw, 5.1rem);
+                line-height: 1.15;
+                color: var(--forest);
+                letter-spacing: -0.04em;
+                margin-bottom: 36px;
+            }
+
+            .hero p {
+                max-width: 560px;
+                font-size: 1.05rem;
+                color: #2d302c;
+                margin-bottom: 40px;
+            }
+
+            .button {
+                display: inline-flex;
+                align-items: center;
+                gap: 18px;
+                background: var(--forest);
+                color: var(--paper-light);
+                padding: 18px 28px;
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                transition: background 0.2s ease, transform 0.2s ease;
+            }
+
+                .button:hover {
+                    background: var(--forest-light);
+                    transform: translateY(-2px);
+                }
+
+            .hero-image-wrap {
+                position: relative;
+            }
+
+            .hero-image {
+                width: 100%;
+                aspect-ratio: 4 / 3;
+                object-fit: cover;
+                border: 1px solid var(--border);
+            }
+
+            /*
+          Rotated coordinate-style text.
+          You can delete this if you don't want it.
+        */
+            .coordinates {
+                position: absolute;
+                right: -54px;
+                top: 50%;
+                transform: rotate(90deg) translateX(50%);
+                transform-origin: right center;
+                font-size: 0.75rem;
+                letter-spacing: 0.18em;
+                color: var(--forest);
+                white-space: nowrap;
+            }
+
+            /*
+          FOCUS / STATS SECTION
+          Mixes a short statement with data-forward metric blocks.
+        */
+            .focus-grid {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .focus-intro {
+                padding: 56px 64px;
+                border-right: 1px solid var(--border);
+            }
+
+            .section-label {
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.24em;
+                text-transform: uppercase;
+                color: var(--forest);
+                margin-bottom: 28px;
+            }
+
+                .section-label::after {
+                    content: "";
+                    display: block;
+                    width: 28px;
+                    height: 1px;
+                    background: var(--forest);
+                    margin-top: 12px;
+                }
+
+            .focus-intro h2 {
+                font-family: 'Libre Baskerville', Georgia, serif;
+                color: var(--forest);
+                font-size: 1.8rem;
+                line-height: 1.35;
+                margin-bottom: 24px;
+            }
+
+            .focus-intro p {
+                color: #333832;
+                margin-bottom: 32px;
+            }
+
+            .mountain-sketch {
+                font-family: 'Libre Baskerville', Georgia, serif;
+                color: var(--forest);
+                font-size: 2rem;
+                letter-spacing: 0.1em;
+                opacity: 0.75;
+            }
+
+            .stats-area {
+                display: grid;
+                grid-template-rows: 1fr auto;
+            }
+
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                align-items: center;
+                padding: 56px 64px;
+            }
+
+            .stat {
+                padding: 0 36px;
+                border-right: 1px solid var(--border);
+            }
+
+                .stat:last-child {
+                    border-right: none;
+                }
+
+            .stat-icon {
+                font-size: 1.5rem;
+                color: var(--forest);
+                margin-bottom: 18px;
+            }
+
+            .stat-number {
+                font-family: 'Libre Baskerville', Georgia, serif;
+                font-size: 2.8rem;
+                color: var(--forest);
+                line-height: 1;
+                margin-bottom: 12px;
+            }
+
+                .stat-number span {
+                    font-family: 'Inter', Arial, sans-serif;
+                    font-size: 0.75rem;
+                    letter-spacing: 0.16em;
+                    text-transform: uppercase;
+                    color: var(--muted);
+                    margin-left: 6px;
+                }
+
+            .stat-label {
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: var(--forest);
+            }
+
+            .quote-row {
+                border-top: 1px solid var(--border);
+                padding: 36px 80px;
+            }
+
+            blockquote {
+                font-family: 'Libre Baskerville', Georgia, serif;
+                font-size: 1.45rem;
+                line-height: 1.55;
+                color: var(--forest);
+                max-width: 760px;
+                border-left: 1px solid var(--accent);
+                padding-left: 32px;
+                font-style: italic;
+            }
+
+            /*
+          FEATURE CARDS
+          Three cards that connect to your main pages.
+        */
+            .cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0;
+                padding: 44px 64px 64px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .card {
+                padding: 0 28px;
+                border-right: 1px solid var(--border);
+            }
+
+                .card:last-child {
+                    border-right: none;
+                }
+
+                .card img {
+                    width: 100%;
+                    aspect-ratio: 4 / 2.5;
+                    object-fit: cover;
+                    margin-bottom: 28px;
+                    border: 1px solid var(--border);
+                }
+
+                .card h3 {
+                    font-size: 0.82rem;
+                    font-weight: 700;
+                    letter-spacing: 0.24em;
+                    text-transform: uppercase;
+                    color: var(--forest);
+                    margin-bottom: 22px;
+                }
+
+                    .card h3::after {
+                        content: "";
+                        display: block;
+                        width: 28px;
+                        height: 1px;
+                        background: var(--forest);
+                        margin-top: 12px;
+                    }
+
+                .card p {
+                    color: #333832;
+                    margin-bottom: 28px;
+                }
+
+            .text-link {
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--forest);
+            }
+
+                .text-link:hover {
+                    color: var(--forest-light);
+                }
+
+            /*
+          FOOTER
+          Simple closing area with monogram, tagline, and copyright.
+        */
+            .site-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 32px;
+                background: var(--forest);
+                color: var(--paper-light);
+                padding: 36px 64px;
+            }
+
+            .footer-brand {
+                display: flex;
+                align-items: center;
+                gap: 28px;
+            }
+
+            .monogram {
+                font-family: 'Libre Baskerville', Georgia, serif;
+                font-size: 1.8rem;
+                padding-right: 28px;
+                border-right: 1px solid rgba(255, 255, 255, 0.35);
+            }
+
+            .footer-tagline {
+                font-family: 'Libre Baskerville', Georgia, serif;
+                font-style: italic;
+                font-size: 0.95rem;
+                color: rgba(255, 255, 255, 0.85);
+            }
+
+            .footer-links {
+                display: flex;
+                gap: 24px;
+                font-size: 0.9rem;
+            }
+
+                .footer-links a:hover {
+                    text-decoration: underline;
+                    text-underline-offset: 4px;
+                }
+
+            .copyright {
+                font-size: 0.85rem;
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+            /*
+          RESPONSIVE DESIGN
+          These rules make the layout work on tablets and phones.
+        */
+            @media (max-width: 950px) {
+                .site-header {
+                    padding: 24px 28px;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .nav-links {
+                    gap: 22px;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+
+                .hero {
+                    grid-template-columns: 1fr;
+                    padding: 48px 28px;
+                }
+
+                .coordinates {
+                    display: none;
+                }
+
+                .focus-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .focus-intro {
+                    border-right: none;
+                    border-bottom: 1px solid var(--border);
+                    padding: 40px 28px;
+                }
+
+                .stats {
+                    grid-template-columns: 1fr;
+                    padding: 32px 28px;
+                }
+
+                .stat {
+                    border-right: none;
+                    border-bottom: 1px solid var(--border);
+                    padding: 28px 0;
+                }
+
+                    .stat:last-child {
+                        border-bottom: none;
+                    }
+
+                .quote-row {
+                    padding: 32px 28px;
+                }
+
+                .cards {
+                    grid-template-columns: 1fr;
+                    padding: 32px 28px;
+                }
+
+                .card {
+                    border-right: none;
+                    border-bottom: 1px solid var(--border);
+                    padding: 32px 0;
+                }
+
+                    .card:last-child {
+                        border-bottom: none;
+                    }
+
+                .site-footer {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    padding: 32px 28px;
+                }
+            }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <!-- ===================== HEADER / NAVIGATION ===================== -->
+        <header class="site-header">
+            <!-- Your name / site logo -->
+            <a href="default.html" class="site-name">Tyler Kjorstad</a>
+
+            <!--
+              Main navigation links
+              Update the href values to match your actual file names.
+            -->
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="default.html" class="active">Home</a>
+                <a href="passions.html">Passions</a>
+                <a href="professional.html">Professional</a>
+                <a href="test-page.html">test page</a>
+            </nav>
+        </header>
+
+        <!-- ===================== HERO SECTION ===================== -->
+        <main>
+            <section class="hero">
+                <div class="hero-copy">
+                    <span class="eyebrow">Endurance. Data. Teaching.</span>
+
+                    <!-- Main headline. Rewrite this to sound exactly like you. -->
+                    <h1>Endurance in the Mountains. Curiosity in the Data.</h1>
+
+                    <!-- Short intro paragraph. Replace with your own bio. -->
+                    <p>
+                        I’m Tyler, an educator, economist, and endurance athlete based in Wyoming. This site brings together my professional work, outdoor passions, and interest in using data to better understand the world.
+                    </p>
+
+                    <a class="button" href="professional.html">Learn more about me <span>→</span></a>
+                </div>
+
+                <div class="hero-image-wrap">
+                    <!--
+                      Replace this file name with your own image.
+                      Example: images/trail-running.jpg
+                    -->
+                    <img class="hero-image" src="mtb_pilot_hill.jpg" alt="Mountain trail landscape" />
+
+                    <!-- Optional coordinate detail. Replace or delete. -->
+                    <div class="coordinates">41.3110° N · 105.5936° W</div>
+                </div>
+            </section>
+
+            <!-- ===================== CURRENT FOCUS / DATA SECTION ===================== -->
+            <section class="focus-grid">
+                <div class="focus-intro">
+                    <div class="section-label">Current Focus</div>
+                    <h2>Building discipline. Building skills.</h2>
+                    <p>
+                        Training for the next challenge, developing better courses, and learning how technology can help people communicate, analyze, and create more effectively.
+                    </p>
+
+                    <!-- Decorative mountain sketch made from text. Replace with image if desired. -->
+                    <div class="mountain-sketch">/\/\/\</div>
+                </div>
+
+                <div class="stats-area">
+                    <div class="stats">
+                        <!-- Stat 1 -->
+                        <div class="stat">
+                            <div class="stat-icon">↟</div>
+                            <div class="stat-number">55 <span>mpw</span></div>
+                            <div class="stat-label">Current training volume</div>
+                        </div>
+
+                        <!-- Stat 2 -->
+                        <div class="stat">
+                            <div class="stat-icon">△</div>
+                            <div class="stat-number">18,340 <span>ft</span></div>
+                            <div class="stat-label">Elevation gain this month</div>
+                        </div>
+
+                        <!-- Stat 3 -->
+                        <div class="stat">
+                            <div class="stat-icon">▥</div>
+                            <div class="stat-number">4:18 <span>/mi</span></div>
+                            <div class="stat-label">Favorite downhill pace</div>
+                        </div>
+                    </div>
+
+                    <!-- Quote / guiding idea -->
+                    <div class="quote-row">
+                        <blockquote>
+                            The best way to predict the future is to build it — one day, one decision, one dataset at a time.
+                        </blockquote>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================== PAGE LINK CARDS ===================== -->
+            <section class="cards">
+                <!-- Passions Card -->
+                <article class="card">
+                    <img src="laramie_pilot_hill.jpg" alt="Outdoor mountain scene" />
+                    <h3>Passions</h3>
+                    <p>
+                        Running, skiing, biking, exploring, and finding perspective outside.
+                    </p>
+                    <a class="text-link" href="passions.html">Explore more →</a>
+                </article>
+
+                <!-- Professional Card -->
+                <article class="card">
+                    <img src="tyler-kjorstad-cob-headshot.png" alt="Laptop with code and work materials" />
+                    <h3>Professional</h3>
+                    <p>
+                        Teaching, economics, information management, data analytics, and student-centered learning.
+                    </p>
+                    <a class="text-link" href="professional.html">View my work →</a>
+                </article>
+
+                <!-- Test Page Card -->
+                <article class="card">
+                    <img src="top_med_bow.jpg" alt="Notebook with charts and data" />
+                    <h3>Test Page</h3>
+                    <p>
+                        A sandbox for ideas, experiments, webpages, and things I am currently building or testing.
+                    </p>
+                    <a class="text-link" href="test-page.html">Check it out →</a>
+                </article>
+            </section>
+        </main>
+
+        <!-- ===================== FOOTER ===================== -->
+        <footer class="site-footer">
+            <div class="footer-brand">
+                <div class="monogram">TK</div>
+                <div class="footer-tagline">
+                    Stay curious. Keep moving.<br />Do good work.
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <!-- Replace # with your real links if desired -->
+                <a href="https://www.linkedin.com/in/tyler-kjorstad-93106128/">LinkedIn</a>
+                <a href="https://github.com/tylerkjorstad">GitHub</a>
+                <a href="tkjorsta@gmail.com">Email</a>
+            </div>
+
+            <div class="copyright">© 2026 Tyler Kjorstad</div>
+        </footer>
+    </div>
+</body>
+</html>
